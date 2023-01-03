@@ -1,0 +1,14 @@
+_site/
+node_modules/*
+.sass-cache
+typings
+.idea
+.vs
+.jekyll-metadata
+.ipynb_checkpoints
+notebook/lab
+.jekyll-cache/
+.vscode/
+Gemfile.lock
+.DS_Store
+_posts/draft/

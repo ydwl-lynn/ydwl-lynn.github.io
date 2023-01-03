@@ -1,0 +1,23 @@
+encoding: utf-8
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    disable: true
+  toc_levels: 2..3
+
+sass:
+  sass_dir: /assets/css/scss
+  style: compressed
+
+future: true
+
+# url format
+permalink: /posts/:year/:month/:day/:slug
+
+author: Lynn
+url: https://ydwl-lynn.github.io
+title: Lynn's Space
+slogan: 愿我的生命璀璨，要闪得漂亮
+

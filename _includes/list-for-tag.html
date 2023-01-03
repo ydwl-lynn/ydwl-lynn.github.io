@@ -1,0 +1,12 @@
+<div class="article-list">
+    {% assign tag = include.tag %}
+    <ul class="m-list">
+    {% for post in site.tags[tag] %}
+    <li class="list-item"> 
+        <a href="{{ post.url }}">
+            <span class="post-date">{{ post.date|date:"%Y-%m-%d" }}</span><p class="post-title">{{ post.title }}</p>
+        </a>
+    </li>
+    {% endfor %}
+    </ul>
+</div>

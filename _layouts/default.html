@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-cmn">
+
+<head>
+    <meta charset="utf-8">
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+    {% if page.description %}
+    <meta name="description" content="{{ page.description }}">
+    {% else %}
+    <meta name="description" content="{{ page.content | strip_html |remove:'\n'|trim|truncate:80,'' }}">
+    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% assign timestamp = site.time | date:"%m%d%H%M" %}
+    <link rel="stylesheet" href="/assets/css/style.css?v={{timestamp}}" type="text/css" />
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="theme-color" content="#f3f3f3">
+</head>
+
+<body>
+    <header class="m-header">
+        <div class="wrap">
+            <div class="site-title">
+                <h1 class="site-name">{{ site.title }}</h1>
+                <p class="site-slogan">{{ site.slogan }}</p>
+            </div>
+            <nav class="site-nav">
+                <ul>
+                    <li><a class="nav-home" href="/"><i class="iconfont icon-home"></i>首页</a></li>
+                    <!-- <li><a class="nav-list" href="/list"><i class="iconfont icon-list"></i>列表</a></li> -->
+                    <li><a class="nav-cate" href="/categories"><i class="iconfont icon-folder"></i>分类</a></li>
+                    <li><a class="nav-tags" href="/tags/"><i class="iconfont icon-tag"></i>标签</a></li>
+                    <li><a class="nav-about" href="/about/"><i class="iconfont icon-plane"></i>关于</a></li>
+
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="m-main">
+        <div class="wrap">
+            {{ content }}
+        </div>
+    </section>
+    
+    <footer class="m-footer">
+        <span class="m-to-top"><i class="iconfont icon-up"></i></span>
+        <div class="wrap">
+            <div class="copyright">
+                <p>{{ site.title }}</p>
+            </div>
+        </div>
+    </footer>
+    <script src="/assets/js/app.js?v={{timestamp}}"></script>
+</body>
+
+</html>
