@@ -274,6 +274,10 @@ h1, h2, h3, h4, h5, h6 {
   list-style: circle;
 }
 
+.typo li p {
+  display: inline-block;
+}
+
 /* 同 ul/ol，在文章中应用 table 基本格式，color 继承外层元素的颜色 */
 .typo table th, .typo table td {
   border: 1px solid #ddd;
