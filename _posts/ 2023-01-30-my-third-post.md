@@ -5,8 +5,6 @@ category: Dense video captioning
 tag: 博客
 ---
 
-- *
-{:toc}
 
 # 前言
 
