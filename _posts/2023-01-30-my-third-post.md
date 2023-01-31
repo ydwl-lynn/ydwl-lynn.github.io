@@ -15,10 +15,8 @@ tag: 博客
 
 本文是由李飞飞团队提出的Dense video captioning的开山之作。本文的贡献如下：
 
-- 首次提出了dense-captioning events任务，它涉及检测和描述视频中的事件；
-
+- 首次提出了 dense-captioning events 任务，它涉及检测和描述视频中的事件；
 - 设计了一个新的模型，能够同时识别视频中的所有事件，并使用自然语言描述检测到的事件。
-
 - 提出一种新的数据集：ActivityNet Captions。
 
 ## 方法概述
@@ -30,27 +28,29 @@ Dense video captioning的挑战是：
 
 1）视频中的时间可以跨越多个时间尺度，甚至可以重叠。
 
-    以前的方法：通过使用平均池化或循环神经网络对整个视频进行编码。这种方法适用与短视频，但对于跨越几分钟的长视频序列进行编码时会导致梯度消失，阻碍训练的成功。
+**以前的方法：**通过使用平均池化或循环神经网络对整个视频进行编码。这种方法适用与短视频，但对于跨越几分钟的长视频序列进行编码时会导致梯度消失，阻碍训练的成功。
 
-    本文方法：引入一个proposal模块，将生成动作proposal的工作扩展为事件的多尺度检测，用来捕获视频中包含的短的、长的以及跨越几分钟的事件；
+**本文方法：**引入一个proposal模块，将生成动作proposal的工作扩展为事件的多尺度检测，用来捕获视频中包含的短的、长的以及跨越几分钟的事件；
 
 2）给定视频中的事件通常是相互关联的。因此模型必须能够使用周围事件的上下文来说明每个事件。
 
-    本文方法：引入一个captioning模块，该模块利用proposal模块中所有事件的上下文来生成每个描述语句。
+**本文方法：**引入一个captioning模块，该模块利用proposal模块中所有事件的上下文来生成每个描述语句。
 
 最后，为了评估我们的模型并对Dense video captioning进行基准测试，我们引入一个大规模的数据集：ActivityNet Captions。
 
-    ActivityNet Captions数据集：包含从ActivityNet数据集中截取的20k个视频，其中每个视频都带有一系列时序定位描述；包含长达10分钟的视频，每个视频平均带有3.65句文本描述。这些描述指可能同时发生的事件没导致视频片段重叠。我们确保给定视频中每个描述都是唯一的，并且只涉及一个片段。数据集中的视频是以人类活动为中心，但描述也可能涉及非人类活动。
+**ActivityNet Captions 数据集：**包含从 ActivityNet 数据集中截取的20k个视频，其中每个视频都带有一系列时序定位描述；包含长达10分钟的视频，每个视频平均带有3.65句文本描述。这些描述指可能同时发生的事件没导致视频片段重叠。我们确保给定视频中每个描述都是唯一的，并且只涉及一个片段。数据集中的视频是以人类活动为中心，但描述也可能涉及非人类活动。
 
 ### 公式化定义
 
 - 输入：一系列视频帧$v=\left \{v_{t}\right \}$,其中$t\in 0,\cdots ,T-1$表示按时间顺序的索引帧。
 
-- 输出：一组描述语句$s_{i}\in S$，其中$s_{i}=\left ( t^{start},t^{end},\left \{v_{j}\right \}\right )$由每个句子的开始和结束时间组成，每个句子由一组词$v_{j}\in V$定义，每个词的长度不同，V表示词汇集。
+- 输出：一组描述语句$s_{i}\in S$，其中$s_{i}=\left ( t^{start},t^{end},\left \{v_{j}\right \}\right)$由每个句子的开始和结束时间组成，每个句子由一组词$v_{j}\in V$定义，每个词的长度不同，V表示词汇集。
 
 本文模型首先将视频帧通过proposal模块生成一组proposals。
 
-$P=\left \{\\left ( t_{i}^{start},t_{i}^{end},score_{i},h_{i}\right )right \}$
+$$
+\ P=\left \{\\left ( t_{i}^{start},t_{i}^{end},score_{i},h_{i}\right )right \}
+$$
 
 所有得分高于阈值的proposals都被输入到caption模块中，caption模块使用来自其他proposal的上下文事件，同时为每个事件配上文本描述。proposal模块输出的每个事件的隐藏表示$h_{i}$被用作caption模块的输入，然后caption模块同时利用其他事件的上下文来生成每个事件的描述。
 
@@ -64,9 +64,13 @@ $P=\left \{\\left ( t_{i}^{start},t_{i}^{end},score_{i},h_{i}\right )right \}$
 
     对于输入的整个视频先使用C3D网络来提取视频特征，之后输入到LSTM网络来把这些特征串联起来，隐藏层$h$作为时序特征，再使用滑动窗口来扫描整个特征序列，得到预测的action segment并且对每个segment打分。至于如何用一个滑动窗口得到不同尺度的segment，文章使用了anchor机制，anchor的尺度使用k-means聚类来对实际的action segments处理，得到k种尺度的anchor，再得到不同尺度的segment。训练时的公式如下：
 
-    $\left (x^{*},\theta ^{*}\right)=\underset{x,\theta}{argmin}\alpha L_{match}\left (x,S\left (\theta \right),A\right)+L_{conf}\left (x,C\left (\theta \right)\right)$
+    $$
+    \ \left (x^{*},\theta ^{*}\right)=\underset{x,\theta}{argmin}\alpha L_{match}\left (x,S\left (\theta \right),A\right)+L_{conf}\left (x,C\left (\theta \right)\right)
+    $$
 
-    s.t. $x_{i,j}\in \left \{0,1\right \},\sum_{i,j}x_{ij}=1$
+    $$
+    \ s.t. x_{i,j}\in \left \{0,1\right \},\sum_{i,j}x_{ij}=1
+    $$
 
 ![fig1](3_fig3.png)
 
