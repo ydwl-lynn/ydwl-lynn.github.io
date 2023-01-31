@@ -8,7 +8,7 @@ tag: 博客
 - *
 {:toc}
 
-# 前言
+## 前言
 
 随着大规模动作数据集的引入，动作检测任务被提出并取得不错的性能。但是该任务存在一个局限性：缺乏细节。因此，后续工作探索使用句子描述来解释视频动作语义。在此基础上进一步提出了Dense video captioning（即识别视频中的所有事件并用自然语言描述它们），如图1所示。
 ![fig1](3_fig1.png)
@@ -21,7 +21,7 @@ tag: 博客
 
 - 提出一种新的数据集：ActivityNet Captions。
 
-# 方法概述
+## 方法概述
 
 本文方法的整体框架图如图2所示，主要包括：proposal模块和captioning模块。我们首先结合Dense video captioning的研究挑战来简述每个模块的研究动机，然后再依次详细介绍各模块。
 ![fig2](3_fig2.png)
@@ -42,7 +42,7 @@ Dense video captioning的挑战是：
 
     ActivityNet Captions数据集：包含从ActivityNet数据集中截取的20k个视频，其中每个视频都带有一系列时序定位描述；包含长达10分钟的视频，每个视频平均带有3.65句文本描述。这些描述指可能同时发生的事件没导致视频片段重叠。我们确保给定视频中每个描述都是唯一的，并且只涉及一个片段。数据集中的视频是以人类活动为中心，但描述也可能涉及非人类活动。
 
-## 公式化定义
+### 公式化定义
 
 - 输入：一系列视频帧$v=\left \{v_{t}\right \}$,其中$t\in 0,\cdots ,T-1$表示按时间顺序的索引帧。
 
@@ -54,7 +54,7 @@ $P=\left \{\\left ( t_{i}^{start},t_{i}^{end},score_{i},h_{i}\right )right \}$
 
 所有得分高于阈值的proposals都被输入到caption模块中，caption模块使用来自其他proposal的上下文事件，同时为每个事件配上文本描述。proposal模块输出的每个事件的隐藏表示$h_{i}$被用作caption模块的输入，然后caption模块同时利用其他事件的上下文来生成每个事件的描述。
 
-## proposal模块
+### proposal模块
 
 - 输入：利用C3D网络提取的视频特征序列：$\left \{f_{t}=F\left ( v_{t}:v_{t+\delta}\right )\right \}$。其中，F表示提取$\delta=16$帧的C3D特征。F的输出是一个大小为N×D的张量，其中D = 500维特征，N = T /δ离散视频帧。
 
@@ -72,16 +72,16 @@ $P=\left \{\\left ( t_{i}^{start},t_{i}^{end},score_{i},h_{i}\right )right \}$
 
 本文的proposal模块：将输入特征使用DAPs来提取事件proposal。为了可以得到交叉重叠的segment，对视频特征使用不同的stride（分别为1、2、4和8）来采样输入到DAPs模型中，这样就得到了不同事件的proposal。
 
-## caption模块
+### caption模块
 
 为了使用到上下文即其他segment的信息，本文caption模块首先使用了attention机制，对当前segment之前的segment特征加权得到一个past特征，再对当前segment之后的segment特征加权得到一个future特征，再和当前segment特征融合为一个整体特征，输入到LSTM网络中生成caption。在上下文的帮助下，每个LSTM拥有关于已经发生或将要发生的事件的知识，并可以相应地调整其生成的caption。
 
-## 损失函数
+### 损失函数
 
 本文使用两个独立的损失来训练proposal模块（$L_{prop}$）和caption模块（$L_{cap}$）。 proposal模块预测了不同proposal长度的置信度，范围在0到1之间。 本文使用一个加权的交叉熵项来评估每个proposal的置信度，只将那些与GT有很高的IoU的建议传递给caption模块。本文在每个句子的所有单词中使用交叉熵损失,通过语言模型中的批量大小和序列长度来规范损失。 本文用λ1=1.0来衡量caption损失的贡献，用λ2=0.1来衡量proposal损失的贡献：
 
 $L=\lambda _{1}L_{cap}+\lambda _{2}L_{prop}$
 
 
-# 总结
+## 总结
 本文作为dense video caption任务的开山之作，详细的给出该任务的公式定义，提出了一种新的模型，并给出了用于该任务的大规模数据集，为后续工作建立了基准。
