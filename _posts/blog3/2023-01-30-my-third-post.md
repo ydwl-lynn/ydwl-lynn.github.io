@@ -12,7 +12,7 @@ tag: 博客
 
 随着大规模动作数据集的引入，动作检测任务被提出并取得不错的性能。但是该任务存在一个局限性：缺乏细节。因此，后续工作探索使用句子描述来解释视频动作语义。在此基础上进一步提出了 Dense video captioning（即识别视频中的所有事件并用自然语言描述它们），如图1所示。
 
-![fig1](/_posts/blog3/image/3_fig1.png){: width="550px"}
+![fig1](/images/2023/3_fig1.png){:width="550px"}
 
 本文是由李飞飞团队提出的 Dense video captioning 的开山之作。本文的贡献如下：
 
@@ -62,7 +62,6 @@ $$\left \{f_{t}=F\left ( v_{t}:v_{t+\delta}\right )\right \}$$
 **proposal模块：** 实际上是DAPs的变体。首先介绍一下DAPs模型：
 
 <div class="card">
-
 DAPs是2016年ECCV提出的一种用于temporal action proposals任务的方法。该任务根据长视频的动作语义信息在时间维度将长视频分割成多个segment，保证每个segment包含一个action。由于action segments的长度不同，在之前的方法中需要设置不同的滑动窗口多次扫描整个视频，再使用极大似然的方法找到最合适的segment，这种方法运行速度很慢。而DAPs只使用了一个滑窗就可以得到不同尺度的proposal，只对视频处理一遍因此速度是之前算法的10倍。它的具体模型如图3所示。
 
 对于输入的整个视频先使用C3D网络来提取视频特征，之后输入到LSTM网络来把这些特征串联起来，隐藏层$$h$$作为时序特征，再使用滑动窗口来扫描整个特征序列，得到预测的action segment并且对每个segment打分。至于如何用一个滑动窗口得到不同尺度的segment，文章使用了anchor机制，anchor的尺度使用k-means聚类来对实际的action segments处理，得到k种尺度的anchor，再得到不同尺度的segment。训练时的公式如下：
@@ -71,8 +70,8 @@ $$\left (x^{*},\theta ^{*}\right)=\underset{x,\theta}{argmin}\alpha L_{match}\le
 
 $$s.t. x_{i,j}\in \left \{0,1\right \},\sum_{i,j}x_{ij}=1$$
 
-![fig1](/_posts/blog3/image/3_fig3.png){: width="550px"}
-
+![fig1](/_posts/blog3/image/3_fig3.png)
+{: width="550px"}
 </div>
 
 本文的proposal模块：将输入特征使用DAPs来提取事件proposal。为了可以得到交叉重叠的segment，对视频特征使用不同的stride（分别为1、2、4和8）来采样输入到DAPs模型中，这样就得到了不同事件的proposal。
