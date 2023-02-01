@@ -61,7 +61,9 @@ $$P=\left \{ left ( t_{i}^{start},t_{i}^{end},score_{i},h_{i}\right )right \}$$
 
 ### proposal模块
 
-- 输入：利用C3D网络提取的视频特征序列：$$\left \{f_{t}=F\left ( v_{t}:v_{t+\delta}\right )\right \}$$。其中，F表示提取 $$\delta=16$$ 帧的C3D特征。F的输出是一个大小为N×D的张量，其中D = 500维特征，N = T /δ离散视频帧。
+- 输入：利用C3D网络提取的视频特征序列：
+
+$$\left \{f_{t}=F\left ( v_{t}:v_{t+\delta}\right )\right \}$$
 
 - proposal模块：实际上是DAPs的变体。首先介绍一下DAPs模型：
 
@@ -88,4 +90,4 @@ $$s.t. x_{i,j}\in \left \{0,1\right \},\sum_{i,j}x_{ij}=1$$
 $$L=\lambda _{1}L_{cap}+\lambda _{2}L_{prop}$$
 
 ## 总结
-本文作为dense video caption任务的开山之作，详细的给出该任务的公式定义，提出了一种新的模型，并给出了用于该任务的大规模数据集，为后续工作建立了基准。
+本文作为 Dense video caption任务的开山之作，详细的给出该任务的公式定义，提出了一种新的模型，并给出了用于该任务的大规模数据集，为后续工作建立了基准。
