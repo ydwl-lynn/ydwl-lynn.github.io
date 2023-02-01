@@ -49,9 +49,9 @@ ActivityNet Captions 数据集：包含从 ActivityNet 数据集中截取的20k�
 
 ### 公式化定义
 
-- 输入：一系列视频帧 $$v=\left \{v_{t}\right \}$$，其中 $$t\in 0,\cdots ,T-1$$ 表示按时间顺序的索引帧。
+- 输入：一系列视频帧 $$v=\left\{v_{t}\right\}$$ 其中, $$t\in 0,\cdots ,T-1$$ 表示按时间顺序的索引帧。
 
-- 输出：一组描述语句 $$s_{i}\in S$$，其中 $$s_{i}=\left ( t^{start},t^{end},\left \{v_{j}\right \}\right )$$ 由每个句子的开始和结束时间组成，每个句子由一组词 $$v_{j}\in V$$ 定义，每个词的长度不同，V表示词汇集。
+- 输出：一组描述语句 $$s_{i}\in S$$ 其中, $$s_{i}=\left ( t^{start},t^{end},\left \{v_{j}\right \}\right )$$ 由每个句子的开始和结束时间组成，每个句子由一组词 $$v_{j}\in V$$ 定义，每个词的长度不同，V表示词汇集。
 
 本文模型首先将视频帧通过 proposal 模块生成一组 proposals 。
 
