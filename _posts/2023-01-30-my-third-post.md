@@ -16,7 +16,7 @@ tag: 博客
 本文是由李飞飞团队提出的Dense video captioning的开山之作。本文的贡献如下：
 
 - 首次提出了 dense-captioning events 任务，它涉及检测和描述视频中的事件；
-- 设计了一个新的模型，能够同时识别视频中的所有事件，并使用自然语言描述检测到的事件。
+- 设计了一个新的模型，能够同时识别视频中的所有事件，并使用自然语言描述检测到的事件；
 - 提出一种新的数据集：ActivityNet Captions。
 
 ## 方法概述
@@ -42,9 +42,9 @@ Dense video captioning的挑战是：
 
 ### 公式化定义
 
-- 输入：一系列视频帧$v=\left \{v_{t}\right \}$,其中$t\in 0,\cdots ,T-1$表示按时间顺序的索引帧。
+**输入：** 一系列视频帧$v=\left \{v_{t}\right \}$,其中$t\in 0,\cdots ,T-1$表示按时间顺序的索引帧。
 
-- 输出：一组描述语句$s_{i}\in S$，其中$s_{i}=\left ( t^{start},t^{end},\left \{v_{j}\right \}\right)$由每个句子的开始和结束时间组成，每个句子由一组词$v_{j}\in V$定义，每个词的长度不同，V表示词汇集。
+**输出：** 一组描述语句$s_{i}\in S$，其中$s_{i}=\left ( t^{start},t^{end},\left \{v_{j}\right \}\right)$由每个句子的开始和结束时间组成，每个句子由一组词$v_{j}\in V$定义，每个词的长度不同，V表示词汇集。
 
 本文模型首先将视频帧通过proposal模块生成一组proposals。
 
@@ -56,21 +56,21 @@ $$
 
 ### proposal模块
 
-- 输入：利用C3D网络提取的视频特征序列：$\left \{f_{t}=F\left ( v_{t}:v_{t+\delta}\right )\right \}$。其中，F表示提取$\delta=16$帧的C3D特征。F的输出是一个大小为N×D的张量，其中D = 500维特征，N = T /δ离散视频帧。
+**输入：** 利用C3D网络提取的视频特征序列：$\left \{f_{t}=F\left ( v_{t}:v_{t+\delta}\right )\right \}$。其中，F表示提取$\delta=16$帧的C3D特征。F的输出是一个大小为N×D的张量，其中D = 500维特征，N = T /δ离散视频帧。
 
-- proposal模块：实际上是DAPs的变体。首先介绍一下DAPs模型：
+**proposal模块：** 实际上是DAPs的变体。首先介绍一下DAPs模型：
 
-    DAPs是2016年ECCV提出的一种用于temporal action proposals任务的方法。该任务根据长视频的动作语义信息在时间维度将长视频分割成多个segment，保证每个segment包含一个action。由于action segments的长度不同，在之前的方法中需要设置不同的滑动窗口多次扫描整个视频，再使用极大似然的方法找到最合适的segment，这种方法运行速度很慢。而DAPs只使用了一个滑窗就可以得到不同尺度的proposal，只对视频处理一遍因此速度是之前算法的10倍。它的具体模型如图3所示。
+DAPs是2016年ECCV提出的一种用于temporal action proposals任务的方法。该任务根据长视频的动作语义信息在时间维度将长视频分割成多个segment，保证每个segment包含一个action。由于action segments的长度不同，在之前的方法中需要设置不同的滑动窗口多次扫描整个视频，再使用极大似然的方法找到最合适的segment，这种方法运行速度很慢。而DAPs只使用了一个滑窗就可以得到不同尺度的proposal，只对视频处理一遍因此速度是之前算法的10倍。它的具体模型如图3所示。
 
-    对于输入的整个视频先使用C3D网络来提取视频特征，之后输入到LSTM网络来把这些特征串联起来，隐藏层$h$作为时序特征，再使用滑动窗口来扫描整个特征序列，得到预测的action segment并且对每个segment打分。至于如何用一个滑动窗口得到不同尺度的segment，文章使用了anchor机制，anchor的尺度使用k-means聚类来对实际的action segments处理，得到k种尺度的anchor，再得到不同尺度的segment。训练时的公式如下：
+对于输入的整个视频先使用C3D网络来提取视频特征，之后输入到LSTM网络来把这些特征串联起来，隐藏层$h$作为时序特征，再使用滑动窗口来扫描整个特征序列，得到预测的action segment并且对每个segment打分。至于如何用一个滑动窗口得到不同尺度的segment，文章使用了anchor机制，anchor的尺度使用k-means聚类来对实际的action segments处理，得到k种尺度的anchor，再得到不同尺度的segment。训练时的公式如下：
 
-    $$
-    \ \left (x^{*},\theta ^{*}\right)=\underset{x,\theta}{argmin}\alpha L_{match}\left (x,S\left (\theta \right),A\right)+L_{conf}\left (x,C\left (\theta \right)\right)
-    $$
+$$
+\ \left (x^{*},\theta ^{*}\right)=\underset{x,\theta}{argmin}\alpha L_{match}\left (x,S\left (\theta \right),A\right)+L_{conf}\left (x,C\left (\theta \right)\right)
+$$
 
-    $$
-    \ s.t. x_{i,j}\in \left \{0,1\right \},\sum_{i,j}x_{ij}=1
-    $$
+$$
+\ s.t. x_{i,j}\in \left \{0,1\right \},\sum_{i,j}x_{ij}=1
+$$
 
 ![fig1](3_fig3.png)
 
@@ -84,7 +84,9 @@ $$
 
 本文使用两个独立的损失来训练proposal模块（$L_{prop}$）和caption模块（$L_{cap}$）。 proposal模块预测了不同proposal长度的置信度，范围在0到1之间。 本文使用一个加权的交叉熵项来评估每个proposal的置信度，只将那些与GT有很高的IoU的建议传递给caption模块。本文在每个句子的所有单词中使用交叉熵损失,通过语言模型中的批量大小和序列长度来规范损失。 本文用λ1=1.0来衡量caption损失的贡献，用λ2=0.1来衡量proposal损失的贡献：
 
-$L=\lambda _{1}L_{cap}+\lambda _{2}L_{prop}$
+$$
+\ L=\lambda _{1}L_{cap}+\lambda _{2}L_{prop}
+$$
 
 
 ## 总结
