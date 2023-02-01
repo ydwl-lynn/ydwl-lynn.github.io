@@ -2,6 +2,7 @@ encoding: utf-8
 markdown: kramdown
 kramdown:
   input: GFM
+  parse_block_html: true
   syntax_highlighter: rouge
   syntax_highlighter_opts:
     disable: true

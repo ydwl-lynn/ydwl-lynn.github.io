@@ -11,14 +11,14 @@ window.MathJax = {
     extensions: ['tex2jax.js'],
     jax: ['input/TeX', 'output/SVG'],
     tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"] ],
         processEscapes: true
     },
     TeX: {
         extensions: ['autoload-all.js']
     },
-    showMathMenu: false,
+    showMathMenu: true,
     styles: {
         '.MathJax_SVG': {
             outline: 'none'
@@ -37,7 +37,6 @@ function APP(){
 APP.prototype.init = function(){
     var _this = this;
     window.addEventListener('DOMContentLoaded', function(){
-        _this.setImage();
         _this.highlight();
         _this.renderMath();
         _this.bindEventListener();
@@ -69,61 +68,6 @@ APP.prototype.bindToTopEvent = function(){
     });
 };
 
-
-APP.prototype.setImage = function () {
-    var KEY_MAP = {
-        'ml': 'margin-left',
-        'w': 'width'
-    };
-
-    var imgs = document.querySelectorAll('.post img');
-    for (var i = 0, len = imgs.length; i < len; i++) {
-        var img = imgs[i];
-        var alt = img.getAttribute('alt') || '';
-        if(!alt){
-            continue;
-        }
-        
-        var params = getParam(alt);
-        img.removeAttribute('alt');
-        params.forEach(function(param){
-            var key = param[0];
-            var value = param[1];
-            if(key in KEY_MAP){
-                key = KEY_MAP[key];
-            }
-
-            if(key == 'text'){
-                var div = document.createElement('div');
-                div.setAttribute('class', 'img-alt');
-                div.innerHTML = '<p>' + value + '</p>';
-                img.parentElement.appendChild(div);
-            }
-            else if(key == 'class'){
-                img.classList.add(value);
-            }
-            else{
-                img.style[key] = value;
-            }
-        });
-    }
-
-    function getParam(s){
-        var r = /<(.+?),(.+?)>/g;
-        var params = []
-        var match = r.exec(s)
-        while(match){
-            var key = match[1];
-            var val = match[2];
-            key = key.trim();
-            val = val.trim();
-            params.push([key, val])
-            match = r.exec(s)
-        }
-        return params;
-    }
-}
-
 APP.prototype.highlight = function(){
     let codeblocks = document.querySelectorAll('pre code');
     if(codeblocks.length == 0){
@@ -134,28 +78,13 @@ APP.prototype.highlight = function(){
 
 
 APP.prototype.renderMath = function(){
-    var scripts = [].slice.call(document.getElementsByTagName('script'), 0);
-    var hasBlockLaTex = scripts.some(function(script){
-        return /math\/tex/.test(script.type);
-    });
-
-    var hasInlineLaTex = false;
-
-    var codes = [].slice.call(document.querySelectorAll("p code"));
-    codes.forEach(function(code){
-        var text = code.innerText;
-        if(text[0] == '$' && text[text.length-1] == '$'){
-            hasInlineLaTex = true;
-            text = text.slice(1, text.length-1);
-            var script = document.createElement("script");
-            script.type = "math/tex";
-            script.innerText = text;
-
-            code.parentElement.replaceChild(script, code);
-        }
-    });
-
-    if(!(hasBlockLaTex || hasInlineLaTex || window.__notebook__ || window.__math__)){
+    var post = document.querySelector(".post")
+    if (post == null) {
+        return;
+    }
+    var content = post.innerText;
+    var hasTex = (content.indexOf("\\(") != -1) || (content.indexOf("\\[") != -1);
+    if (!hasTex) {
         return;
     }
 
