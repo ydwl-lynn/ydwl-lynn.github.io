@@ -61,7 +61,9 @@ $$P=\left \{ left ( t_{i}^{start},t_{i}^{end},score_{i},h_{i}\right )right \}$$
 
 ### proposal模块
 
-- 输入：利用C3D网络提取的视频特征序列：$$\left \{f_{t}=F\left ( v_{t}:v_{t+\delta}\right )\right \}$$。
+- 输入：利用C3D网络提取的视频特征序列：
+
+$$\left \{f_{t}=F\left ( v_{t}:v_{t+\delta}\right )\right \}$$
 
 - proposal模块：实际上是DAPs的变体。首先介绍一下DAPs模型：
 
