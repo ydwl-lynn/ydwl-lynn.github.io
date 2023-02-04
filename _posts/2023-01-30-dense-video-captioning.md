@@ -12,7 +12,7 @@ tag: 博客
 
 随着大规模动作数据集的引入，动作检测任务被提出并取得不错的性能。但是该任务存在一个局限性：缺乏细节。因此，后续工作探索使用句子描述来解释视频动作语义。在此基础上进一步提出了Dense video captioning（即识别视频中的所有事件并用自然语言描述它们），如图1所示。
 
-![fig1](/images/2023/3_fig1.png){:width="550px"}
+![fig1](/images/2023/3/3_fig1.png){:width="550px"}
 
 本文是由李飞飞团队提出的 Dense video captioning 的开山之作。本文的贡献如下：
 
@@ -23,7 +23,7 @@ tag: 博客
 ## 方法概述
 
 本文方法的整体框架图如图2所示，主要包括：proposal 模块和 caption 模块。我们首先结合 Dense video captioning 的研究挑战来简述每个模块的研究动机，然后再依次详细介绍各模块。
-![fig2](/images/2023/3_fig2.png)
+![fig2](/images/2023/3/3_fig2.png)
 
 Dense video captioning 的挑战是：
 
@@ -75,7 +75,7 @@ $$\left (x^{*},\theta ^{*}\right)=\underset{x,\theta}{argmin}\alpha L_{match}\le
 
 $$s.t. x_{i,j}\in \left \{0,1\right \},\sum_{i,j}x_{ij}=1$$
 
-![](/images/2023/3_fig3.png)
+![](/images/2023/3/3_fig3.png)
 
 本文的 proposal 模块：将输入特征使用 DAPs 来提取事件 proposal 。为了可以得到交叉重叠的 segment ，对视频特征使用不同的 stride（分别为1、2、4和8）来采样输入到DAPs模型中，这样就得到了不同事件的 proposal 。
 
