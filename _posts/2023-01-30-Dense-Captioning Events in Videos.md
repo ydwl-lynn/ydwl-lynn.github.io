@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 论文阅读 - Dense-Captioning Events in Videos
-category: Dense video captioning
+category: 论文阅读
 tag: 博客
 ---
 
