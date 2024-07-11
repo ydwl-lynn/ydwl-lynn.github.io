@@ -1,13 +1,12 @@
 ---
 layout: post
-title: 论文阅读 - Learning to (Learn at Test Time): RNNs with Expressive Hidden states
+title: 论文阅读 - Learning to (Learn at Test Time):RNNs with Expressive Hidden states
 category: 论文阅读
 tag: 博客
 ---
 
 - *
 {:toc}
-
 
 
 ## 起源
